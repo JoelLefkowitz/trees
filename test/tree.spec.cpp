@@ -1,7 +1,6 @@
 #include "tree.spec.hpp"
-#include "../../../runtime/engine/components/component.tpp"
-#include "../../functional/generics/functor/foreach.tpp"
 #include <cstddef>
+#include <functional/generics/functor/foreach.tpp>
 #include <functional>
 #include <gtest/gtest.h>
 #include <memory>

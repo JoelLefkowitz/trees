@@ -1,7 +1,6 @@
 #ifndef TREES_TREE_HPP
 #define TREES_TREE_HPP
 
-#include "../../../developer/interfaces/abstract/uncopyable.hpp"
 #include <cstddef>
 #include <functional>
 #include <map>
@@ -18,9 +17,7 @@ namespace trees {
     using Callback = std::function<void(Vertex, const Vertices &)>;
     using Search   = std::function<bool(Vertex, const Vertices &)>;
 
-    class Tree
-        : public std::enable_shared_from_this<Tree>
-        , protected developer::Uncopyable {
+    class Tree : public std::enable_shared_from_this<Tree> {
       public:
         static void remove(const Vertices &vertices);
         static void restore(const Vertices &vertices);
@@ -30,6 +27,9 @@ namespace trees {
         Vertices children;
 
         explicit Tree(const Vertices &children = {});
+
+        Tree(const Tree &)            = delete;
+        Tree &operator=(const Tree &) = delete;
 
         Vertex add_child(Vertex vertex);
 

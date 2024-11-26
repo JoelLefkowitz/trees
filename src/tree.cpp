@@ -1,12 +1,12 @@
 #include "tree.hpp"
-#include "../../functional/generics/functor/filter.tpp"
-#include "../../functional/generics/functor/foreach.tpp"
-#include "../../functional/generics/functor/map.tpp"
-#include "../../functional/instances/booleans/booleans.tpp"
-#include "../../functional/instances/vectors/elements.tpp"
-#include "../../functional/instances/vectors/immutable.tpp"
 #include <cstddef>
 #include <deque>
+#include <functional/generics/functor/filter.tpp>
+#include <functional/generics/functor/foreach.tpp>
+#include <functional/generics/functor/map.tpp>
+#include <functional/instances/booleans/booleans.tpp>
+#include <functional/instances/vectors/elements.tpp>
+#include <functional/instances/vectors/immutable.tpp>
 #include <vector>
 
 void trees::Tree::remove(const Vertices &vertices) {

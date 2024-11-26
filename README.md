@@ -7,7 +7,11 @@ Extensible tree data structure.
 
 ## Installing
 
-You can download the [sources](https://download-directory.github.io?url=https://github.com/joellefkowitz/trees/tree/master/src).
+```bash
+conan search trees
+```
+
+You can also download the [sources](https://download-directory.github.io?url=https://github.com/joellefkowitz/trees/tree/master/src).
 
 ## Documentation
 

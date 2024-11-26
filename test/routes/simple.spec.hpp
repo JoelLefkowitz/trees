@@ -1,7 +1,7 @@
 #ifndef TREES_ROUTES_SIMPLE_SPEC_HPP
 #define TREES_ROUTES_SIMPLE_SPEC_HPP
 
-#include "tree.spec.hpp"
+#include "../tree.spec.hpp"
 #include <gtest/gtest.h>
 
 class SimpleTree : public TestTree {

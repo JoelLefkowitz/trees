@@ -1,6 +1,6 @@
 #include "loops.spec.hpp"
-#include "../../functional/generics/functor/foreach.tpp"
-#include "tree.spec.hpp"
+#include "../tree.spec.hpp"
+#include <functional/generics/functor/foreach.tpp>
 #include <functional>
 #include <gtest/gtest.h>
 #include <memory>

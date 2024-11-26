@@ -1,12 +1,14 @@
 #ifndef TREES_TREE_SPEC_HPP
 #define TREES_TREE_SPEC_HPP
 
-#include "../src/tree.hpp"
 #include <cstddef>
 #include <functional>
 #include <gtest/gtest.h>
 #include <map>
 #include <memory>
+
+// cppclean-disable-next-line
+#include "../src/tree.hpp"
 
 using namespace trees;
 
