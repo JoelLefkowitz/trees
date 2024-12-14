@@ -1,4 +1,3 @@
-from conanfile import Recipe
 from miniscons import (
     Build,
     Flag,
@@ -12,21 +11,24 @@ from miniscons import (
 )
 from walkmate import tree
 
-env = conan()
+name = "trees"
+conandeps = "build-release/conan/SConscript_conandeps"
+
+env = conan(source=conandeps)
 
 runtime = Build(
-    "runtime",
+    "build",
     tree("src", r"(?<!\.spec)\.cpp$", ["test.cpp"]),
-    flags("c++17"),
+    flags("c++20"),
     shared=True,
-    rename=Recipe.name,
+    rename=name,
 )
 
 tests = Build(
     "tests",
     [*tree("src", r"\.cpp$"), *tree("test", r"\.cpp$")],
-    flags("c++17"),
-    packages(["gtest"]),
+    flags("c++20"),
+    packages(["gtest"], source=conandeps),
 )
 
 test = Target(
@@ -44,7 +46,7 @@ cspell = Script(
 
 cppclean = Script(
     "cppclean",
-    ["cppclean", "."],
+    ["cppclean", "src"],
 )
 
 cppcheck = Script(
@@ -61,14 +63,14 @@ cppcheck = Script(
     ],
 )
 
-clang_tidy= Script(
+clang_tidy = Script(
     "clang-tidy",
     ["clang-tidy", tree("src", r"\.(cpp)$"), "--", [f"-I{i}" for i in includes]],
 )
 
 trufflehog = Script(
     "trufflehog",
-    ["trufflehog3"],
+    ["trufflehog3", "-c", ".trufflehog3.yaml"],
 )
 
 clang_format = Script(
@@ -104,7 +106,7 @@ sphinx = Script(
 
 lint = Routine(
     "lint",
-    [cspell, cppclean, cppcheck, clang_tidy, trufflehog],
+    [cspell, cppclean, trufflehog],
 )
 
 fmt = Routine(
@@ -120,7 +122,7 @@ docs = Routine(
 cli = Tasks(
     [runtime, tests],
     [test],
-    [*lint.scripts, *fmt.scripts, *docs.scripts],
+    [*lint.scripts, *fmt.scripts, *docs.scripts, cppcheck, clang_tidy],
     [lint, fmt, docs],
 )
 

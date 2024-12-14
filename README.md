@@ -2,7 +2,7 @@
 
 Extensible tree data structure.
 
-![Review](https://img.shields.io/github/actions/workflow/status/JoelLefkowitz/trees/review.yml)
+![Review](https://img.shields.io/github/actions/workflow/status/JoelLefkowitz/trees/review.yaml)
 ![Quality](https://img.shields.io/codacy/grade/_)
 
 ## Installing
@@ -11,7 +11,7 @@ Extensible tree data structure.
 conan search trees
 ```
 
-You can also download the [sources](https://download-directory.github.io?url=https://github.com/joellefkowitz/trees/tree/master/src).
+You can also download the [sources](https://download-directory.github.io?url=https://github.com/JoelLefkowitz/trees/tree/master/src).
 
 ## Documentation
 

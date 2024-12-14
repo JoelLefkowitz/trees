@@ -4,9 +4,9 @@
 #include <functional/generics/functor/filter.tpp>
 #include <functional/generics/functor/foreach.tpp>
 #include <functional/generics/functor/map.tpp>
-#include <functional/instances/booleans/booleans.tpp>
-#include <functional/instances/vectors/elements.tpp>
-#include <functional/instances/vectors/immutable.tpp>
+#include <functional/implementations/booleans/booleans.tpp>
+#include <functional/implementations/vectors/elements.tpp>
+#include <functional/implementations/vectors/immutable.tpp>
 #include <vector>
 
 void trees::Tree::remove(const Vertices &vertices) {
@@ -136,7 +136,7 @@ trees::Degrees trees::Tree::indegrees() {
 trees::Degrees trees::Tree::outdegrees() {
     Degrees map;
 
-    std::function<bool(Vertex)> included = [](Vertex vertex) { return !vertex->removed; };
+    std::function<bool(const Vertex &)> included = [](const Vertex &vertex) { return !vertex->removed; };
 
     std::function<void(Vertex)> step = [&map, &included](auto vertex) {
         map[vertex->shared_from_this()] = functional::filter(included, vertex->children).size();
@@ -146,13 +146,17 @@ trees::Degrees trees::Tree::outdegrees() {
     return map;
 }
 
-bool trees::Tree::contains(Vertex target) {
+bool trees::Tree::contains(const Vertex &target) {
     return search([target](auto vertex, const auto &) { return vertex == target; });
 }
 
 size_t trees::Tree::size() { return dfs().size(); }
 
 bool trees::Tree::singleton() const { return children.empty(); }
+
+bool trees::Tree::leaf() const {
+    return children.empty() || (children.size() == 1 && children.at(0) == this->shared_from_this());
+}
 
 bool trees::Tree::self_loops() {
     return search([](auto vertex, const auto &) { return functional::contains(vertex->children, vertex); });

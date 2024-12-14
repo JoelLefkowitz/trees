@@ -1,51 +1,77 @@
+import os
+
 from conan import ConanFile
 from conan.tools.files import copy
 from conan.tools.scons import SConsDeps
+from conan.tools.layout import basic_layout
 
 
-class Recipe(ConanFile):
+class TreesConan(ConanFile):
     name = "trees"
+    description = "Extensible tree data structure."
+
     version = "0.0.0"
+    license = "MIT"
 
-    requires = [
-        "functional/0.1.0",
-    ]
+    url = "https://github.com/conan-io/conan-center-index"
+    homepage = "https://github.com/JoelLefkowitz/trees"
 
-    def build_requirements(self):
-        self.test_requires("gtest/1.12.1")
+    topics = (
+        "tree",
+        "graph",
+        "degrees",
+        "node",
+    )
 
-    def export_sources(self):
-        for source in [
-            "conanfile.py",
-            "SConstruct.py",
-            "src/*.[cht]pp",
-        ]:
-            copy(
-                self,
-                source,
-                self.recipe_folder,
-                self.export_sources_folder,
-            )
+    requires = ("functional/0.0.0",)
+
+    settings = (
+        "os",
+        "arch",
+        "compiler",
+        "build_type",
+    )
+
+    exports_sources = (
+        "src/*.[cht]pp",
+        "conanfile.py",
+        "Sconstruct.py",
+        "LICENSE.md",
+    )
+
+    def layout(self):
+        basic_layout(self, src_folder="src")
 
     def generate(self):
         SConsDeps(self).generate()
 
+    def build_requirements(self):
+        self.test_requires("gtest/1.12.1")
+
     def build(self):
-        self.run("scons runtime")
+        os.chdir("..")
+        self.run("scons build")
 
     def package(self):
         copy(
             self,
+            "LICENSE.md",
+            os.path.join(self.build_folder),
+            os.path.join(self.package_folder, "licenses"),
+        )
+        copy(
+            self,
             "*.[ht]pp",
-            f"{self.build_folder}/src",
-            f"{self.package_folder}/include/{self.name}",
+            os.path.join(self.build_folder, "..", "src"),
+            os.path.join(self.package_folder, "include", self.name),
         )
         copy(
             self,
             "*.a",
-            f"{self.build_folder}/dist",
-            f"{self.package_folder}/lib",
+            os.path.join(self.build_folder, "..", "dist"),
+            os.path.join(self.package_folder, "lib"),
         )
 
     def package_info(self):
+        self.cpp_info.bindirs = []
         self.cpp_info.libs = [self.name]

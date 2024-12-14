@@ -1,5 +1,5 @@
 #include "loops.spec.hpp"
-#include "../tree.spec.hpp"
+#include "../setup/suites.spec.hpp"
 #include <functional/generics/functor/foreach.tpp>
 #include <functional>
 #include <gtest/gtest.h>
@@ -23,7 +23,6 @@ void LoopsTree::SetUp() {
 TEST_F(LoopsTree, DFS) {
     dfs({
         {a, {a, b, c}},
-
         {b, {b, c}   },
         {c, {c}      }
     });

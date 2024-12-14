@@ -1,7 +1,7 @@
-#ifndef TREES_CYCLES_CYCLIC_SPEC_HPP
-#define TREES_CYCLES_CYCLIC_SPEC_HPP
+#ifndef TREES_TEST_CYCLES_CYCLIC_SPEC_HPP
+#define TREES_TEST_CYCLES_CYCLIC_SPEC_HPP
 
-#include "../tree.spec.hpp"
+#include "../setup/suites.spec.hpp"
 #include <gtest/gtest.h>
 
 class CyclicTree : public TestTree {

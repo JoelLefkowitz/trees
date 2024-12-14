@@ -1,5 +1,5 @@
-#ifndef TREES_TREE_SPEC_HPP
-#define TREES_TREE_SPEC_HPP
+#ifndef TREES_TEST_SETUP_SUITES_SPEC_HPP
+#define TREES_TEST_SETUP_SUITES_SPEC_HPP
 
 #include <cstddef>
 #include <functional>
@@ -8,7 +8,7 @@
 #include <memory>
 
 // cppclean-disable-next-line
-#include "../src/tree.hpp"
+#include "../../src/tree.hpp"
 
 using namespace trees;
 

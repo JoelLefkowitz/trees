@@ -31,6 +31,8 @@ namespace trees {
         Tree(const Tree &)            = delete;
         Tree &operator=(const Tree &) = delete;
 
+        ~Tree() = default;
+
         Vertex add_child(Vertex vertex);
 
         // Depth first search including itself.
@@ -49,13 +51,16 @@ namespace trees {
         Degrees outdegrees();
 
         // Contains a specific vertex.
-        bool contains(Vertex target);
+        bool contains(const Vertex &target);
 
         // Number of vertices.
         size_t size();
 
         // No children.
         bool singleton() const;
+
+        // No children other than itself.
+        bool leaf() const;
 
         // For any vertex a. a ↻.
         bool self_loops();

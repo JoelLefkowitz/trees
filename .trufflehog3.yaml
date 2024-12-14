@@ -19,6 +19,7 @@ exclude:
 
   - message: Tooling outputs
     paths:
+      - CMakeCache.txt
       - docs/build
       - docs/dist
       - docs/*/dist
