@@ -8,50 +8,62 @@
 #include <vector>
 
 namespace trees {
+    template <typename T>
     class Tree;
 
-    using Vertex   = std::shared_ptr<Tree>;
-    using Vertices = std::vector<Vertex>;
-    using Degrees  = std::map<Vertex, size_t>;
+    template <typename T>
+    using Vertex = std::shared_ptr<Tree<T>>;
 
-    using Callback = std::function<void(Vertex, const Vertices &)>;
-    using Search   = std::function<bool(Vertex, const Vertices &)>;
+    template <typename T>
+    using Vertices = std::vector<Vertex<T>>;
 
-    class Tree : public std::enable_shared_from_this<Tree> {
+    template <typename T>
+    using Degrees = std::map<Vertex<T>, size_t>;
+
+    template <typename T>
+    using Callback = std::function<void(Vertex<T>, const Vertices<T> &)>;
+
+    template <typename T>
+    using Search = std::function<bool(Vertex<T>, const Vertices<T> &)>;
+
+    template <typename T>
+    class Tree : public std::enable_shared_from_this<Tree<T>> {
       public:
-        static void remove(const Vertices &vertices);
-        static void restore(const Vertices &vertices);
+        static void remove(const Vertices<T> &vertices);
+        static void restore(const Vertices<T> &vertices);
+
+        T content;
 
         bool removed = false;
 
-        Vertices children;
+        Vertices<T> children;
 
-        explicit Tree(const Vertices &children = {});
+        explicit Tree(T content, const Vertices<T> &children = {});
 
-        Tree(const Tree &)            = delete;
-        Tree &operator=(const Tree &) = delete;
+        Tree(const Tree<T> &)               = delete;
+        Tree<T> &operator=(const Tree<T> &) = delete;
 
         ~Tree() = default;
 
-        Vertex add_child(Vertex vertex);
+        Vertex<T> add_child(Vertex<T> vertex);
 
         // Depth first search including itself.
-        Vertices dfs();
+        Vertices<T> dfs();
 
         // Breadth first search including itself.
-        Vertices bfs();
+        Vertices<T> bfs();
 
         // Depth first search of a condition with early return.
-        bool search(const Search &condition);
+        bool search(const Search<T> &condition);
 
         // Count the indegree of each vertex.
-        Degrees indegrees();
+        Degrees<T> indegrees();
 
         // Count the outdegree of each vertex.
-        Degrees outdegrees();
+        Degrees<T> outdegrees();
 
         // Contains a specific vertex.
-        bool contains(const Vertex &target);
+        bool contains(const Vertex<T> &target);
 
         // Number of vertices.
         size_t size();

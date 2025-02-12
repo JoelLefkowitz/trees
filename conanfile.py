@@ -9,7 +9,6 @@ from conan.tools.layout import basic_layout
 class TreesConan(ConanFile):
     name = "trees"
     description = "Extensible tree data structure."
-
     version = "0.0.0"
     license = "MIT"
 

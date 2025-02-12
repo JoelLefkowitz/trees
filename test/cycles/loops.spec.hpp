@@ -6,7 +6,7 @@
 
 class LoopsTree : public TestTree {
   protected:
-    Vertex a, b, c, d, e, f;
+    Vertex<int> a, b, c, d, e, f;
     void   SetUp() override;
 };
 

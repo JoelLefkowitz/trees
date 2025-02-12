@@ -8,28 +8,28 @@
 #include <memory>
 
 // cppclean-disable-next-line
-#include "../../src/tree.hpp"
+#include "../../src/tree.tpp"
 
 using namespace trees;
 
 struct TestCase {
-    Vertex node;
+    Vertex<int> node;
 };
 
 struct DFSTestCase : TestCase {
-    Vertices expected = {};
+    Vertices<int> expected = {};
 };
 
 struct BFSTestCase : TestCase {
-    Vertices expected = {};
+    Vertices<int> expected = {};
 };
 
 struct IndegreesTestCase : TestCase {
-    Degrees expected = {};
+    Degrees<int> expected = {};
 };
 
 struct OutdegreesTestCase : TestCase {
-    Degrees expected = {};
+    Degrees<int> expected = {};
 };
 
 struct SizeTestCase : TestCase {

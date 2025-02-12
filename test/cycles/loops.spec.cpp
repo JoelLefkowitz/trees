@@ -11,9 +11,9 @@
 //  ↓
 // c(3)
 void LoopsTree::SetUp() {
-    a = std::make_shared<Tree>();
-    b = std::make_shared<Tree>();
-    c = std::make_shared<Tree>();
+    a = std::make_shared<Tree<int>>(1);
+    b = std::make_shared<Tree<int>>(2);
+    c = std::make_shared<Tree<int>>(3);
 
     a->add_child(b);
     b->add_child(b);

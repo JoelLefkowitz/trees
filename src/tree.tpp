@@ -1,3 +1,6 @@
+#ifndef TREES_TREE_TPP
+#define TREES_TREE_TPP
+
 #include "tree.hpp"
 #include <cstddef>
 #include <deque>
@@ -9,8 +12,9 @@
 #include <functional/implementations/vectors/immutable.tpp>
 #include <vector>
 
-void trees::Tree::remove(const Vertices &vertices) {
-    std::function<void(Vertex)> remove_child = [](auto child) {
+template <typename T>
+void trees::Tree<T>::remove(const Vertices<T> &vertices) {
+    std::function<void(Vertex<T>)> remove_child = [](auto child) {
         if (child) {
             child->removed = true;
         }
@@ -19,8 +23,9 @@ void trees::Tree::remove(const Vertices &vertices) {
     functional::foreach (remove_child, vertices);
 }
 
-void trees::Tree::restore(const Vertices &vertices) {
-    std::function<void(Vertex)> include_child = [](auto child) {
+template <typename T>
+void trees::Tree<T>::restore(const Vertices<T> &vertices) {
+    std::function<void(Vertex<T>)> include_child = [](auto child) {
         if (child) {
             child->removed = false;
         }
@@ -29,17 +34,22 @@ void trees::Tree::restore(const Vertices &vertices) {
     functional::foreach (include_child, vertices);
 }
 
-trees::Tree::Tree(const Vertices &children) : children(functional::unique(children)) {}
+template <typename T>
+trees::Tree<T>::Tree(T content, const Vertices<T> &children)
+    : content(content)
+    , children(functional::unique(children)) {}
 
-trees::Vertex trees::Tree::add_child(Vertex vertex) {
+template <typename T>
+trees::Vertex<T> trees::Tree<T>::add_child(Vertex<T> vertex) {
     children.push_back(vertex);
     return vertex;
 }
 
-trees::Vertices trees::Tree::dfs() {
-    Vertices visited;
+template <typename T>
+trees::Vertices<T> trees::Tree<T>::dfs() {
+    Vertices<T> visited;
 
-    std::deque<Vertex> next({this->shared_from_this()});
+    std::deque<Vertex<T>> next({this->shared_from_this()});
 
     while (!next.empty()) {
         auto vertex = next.front();
@@ -57,10 +67,11 @@ trees::Vertices trees::Tree::dfs() {
     return visited;
 }
 
-trees::Vertices trees::Tree::bfs() {
-    Vertices visited;
+template <typename T>
+trees::Vertices<T> trees::Tree<T>::bfs() {
+    Vertices<T> visited;
 
-    std::deque<Vertex> next({this->shared_from_this()});
+    std::deque<Vertex<T>> next({this->shared_from_this()});
 
     while (!next.empty()) {
         auto vertex = next.front();
@@ -78,11 +89,12 @@ trees::Vertices trees::Tree::bfs() {
     return visited;
 }
 
-bool trees::Tree::search(const Search &condition) {
-    Vertices           visited;
-    std::deque<Vertex> next({this->shared_from_this()});
+template <typename T>
+bool trees::Tree<T>::search(const Search<T> &condition) {
+    Vertices<T>           visited;
+    std::deque<Vertex<T>> next({this->shared_from_this()});
 
-    std::map<Vertex, Vertices> paths;
+    std::map<Vertex<T>, Vertices<T>> paths;
 
     while (!next.empty()) {
         auto vertex = next.front();
@@ -108,12 +120,13 @@ bool trees::Tree::search(const Search &condition) {
     return false;
 }
 
-trees::Degrees trees::Tree::indegrees() {
-    Degrees map({
+template <typename T>
+trees::Degrees<T> trees::Tree<T>::indegrees() {
+    Degrees<T> map({
         {this->shared_from_this(), 0}
     });
 
-    std::function<void(Vertex)> count = [&map](auto child) {
+    std::function<void(Vertex<T>)> count = [&map](auto child) {
         if (!child->removed) {
             if (map.count(child) == 0) {
                 map[child] = 0;
@@ -123,7 +136,7 @@ trees::Degrees trees::Tree::indegrees() {
         }
     };
 
-    std::function<void(Vertex)> step = [&count](auto vertex) { functional::foreach (count, vertex->children); };
+    std::function<void(Vertex<T>)> step = [&count](auto vertex) { functional::foreach (count, vertex->children); };
 
     if (removed) {
         return {};
@@ -133,12 +146,13 @@ trees::Degrees trees::Tree::indegrees() {
     return map;
 }
 
-trees::Degrees trees::Tree::outdegrees() {
-    Degrees map;
+template <typename T>
+trees::Degrees<T> trees::Tree<T>::outdegrees() {
+    Degrees<T> map;
 
-    std::function<bool(const Vertex &)> included = [](const Vertex &vertex) { return !vertex->removed; };
+    std::function<bool(const Vertex<T> &)> included = [](const Vertex<T> &vertex) { return !vertex->removed; };
 
-    std::function<void(Vertex)> step = [&map, &included](auto vertex) {
+    std::function<void(Vertex<T>)> step = [&map, &included](auto vertex) {
         map[vertex->shared_from_this()] = functional::filter(included, vertex->children).size();
     };
 
@@ -146,40 +160,57 @@ trees::Degrees trees::Tree::outdegrees() {
     return map;
 }
 
-bool trees::Tree::contains(const Vertex &target) {
+template <typename T>
+bool trees::Tree<T>::contains(const Vertex<T> &target) {
     return search([target](auto vertex, const auto &) { return vertex == target; });
 }
 
-size_t trees::Tree::size() { return dfs().size(); }
+template <typename T>
+size_t trees::Tree<T>::size() {
+    return dfs().size();
+}
 
-bool trees::Tree::singleton() const { return children.empty(); }
+template <typename T>
+bool trees::Tree<T>::singleton() const {
+    return children.empty();
+}
 
-bool trees::Tree::leaf() const {
+template <typename T>
+bool trees::Tree<T>::leaf() const {
     return children.empty() || (children.size() == 1 && children.at(0) == this->shared_from_this());
 }
 
-bool trees::Tree::self_loops() {
+template <typename T>
+bool trees::Tree<T>::self_loops() {
     return search([](auto vertex, const auto &) { return functional::contains(vertex->children, vertex); });
 }
 
-bool trees::Tree::parallel_links() {
+template <typename T>
+bool trees::Tree<T>::parallel_links() {
     return search([](auto vertex, const auto &path) {
         return !path.empty() && functional::contains(vertex->children, path.back());
     });
 }
 
-bool trees::Tree::simple() { return !self_loops() && !parallel_links(); }
+template <typename T>
+bool trees::Tree<T>::simple() {
+    return !self_loops() && !parallel_links();
+}
 
-bool trees::Tree::cyclic() {
+template <typename T>
+bool trees::Tree<T>::cyclic() {
     return !removed && search([](auto vertex, const auto &path) {
         return functional::contains(vertex->children, vertex) || functional::overlaps(vertex->children, path);
     });
 }
 
-bool trees::Tree::multitree() {
-    std::function<bool(const Vertex &, const size_t &)> multiple = [](const auto &, const auto &size) {
+template <typename T>
+bool trees::Tree<T>::multitree() {
+    std::function<bool(const Vertex<T> &, const size_t &)> multiple = [](const auto &, const auto &size) {
         return size > 1;
     };
 
     return functional::any(functional::map(multiple, indegrees()));
 }
+
+#endif

@@ -6,7 +6,7 @@
 
 class RemovedTree : public TestTree {
   protected:
-    Vertex a, b, c, d;
+    Vertex<int> a, b, c, d;
     void   SetUp() override;
 };
 

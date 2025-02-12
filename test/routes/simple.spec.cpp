@@ -11,12 +11,12 @@
 //  ↓        ↙    ↘
 // c(3)   e(5)    f(6)
 void SimpleTree::SetUp() {
-    a = std::make_shared<Tree>();
-    b = std::make_shared<Tree>();
-    c = std::make_shared<Tree>();
-    d = std::make_shared<Tree>();
-    e = std::make_shared<Tree>();
-    f = std::make_shared<Tree>();
+    a = std::make_shared<Tree<int>>(1);
+    b = std::make_shared<Tree<int>>(2);
+    c = std::make_shared<Tree<int>>(3);
+    d = std::make_shared<Tree<int>>(4);
+    e = std::make_shared<Tree<int>>(5);
+    f = std::make_shared<Tree<int>>(6);
 
     a->add_child(b);
     b->add_child(c);
