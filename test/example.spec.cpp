@@ -27,8 +27,7 @@ class Component {
 //  ↓        ↑        ↙   ↓   ↘
 // f(6)  →  g(7)  h(8)  i(✖)  j(10) ↺
 TEST(ExampleTree, Examples) {
-
-    // TODO: Add move semantics 
+    // TODO: Add move semantics
     auto a = std::make_shared<Tree<Component>>(Component(1));
     auto b = std::make_shared<Tree<Component>>(Component(2));
     auto c = std::make_shared<Tree<Component>>(Component(3));

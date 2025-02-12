@@ -16,14 +16,6 @@ conandeps = "build-release/conan/SConscript_conandeps"
 
 env = conan(source=conandeps)
 
-runtime = Build(
-    "build",
-    tree("src", r"(?<!\.spec)\.cpp$", ["test.cpp"]),
-    flags("c++20"),
-    shared=True,
-    rename=name,
-)
-
 tests = Build(
     "tests",
     [*tree("src", r"\.cpp$"), *tree("test", r"\.cpp$")],
