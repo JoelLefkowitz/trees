@@ -5,18 +5,23 @@
 #include <gtest/gtest.h>
 #include <memory>
 
-void TestTree::TearDown() {}
+void TestTree::TearDown() {
+}
 
 void dfs(const std::vector<DFSTestCase> &cases) {
     functional::foreach (
-        std::function<void(const DFSTestCase &)>([](const auto &test) { EXPECT_EQ(test.node->dfs(), test.expected); }),
+        std::function<void(const DFSTestCase &)>([](const auto &test) {
+            EXPECT_EQ(test.node->dfs(), test.expected);
+        }),
         cases
     );
 }
 
 void bfs(const std::vector<BFSTestCase> &cases) {
     functional::foreach (
-        std::function<void(const BFSTestCase &)>([](const auto &test) { EXPECT_EQ(test.node->bfs(), test.expected); }),
+        std::function<void(const BFSTestCase &)>([](const auto &test) {
+            EXPECT_EQ(test.node->bfs(), test.expected);
+        }),
         cases
     );
 }
@@ -41,8 +46,9 @@ void outdegrees(const std::vector<OutdegreesTestCase> &cases) {
 
 void size(const std::vector<SizeTestCase> &cases) {
     functional::foreach (
-        std::function<void(const SizeTestCase &)>([](const auto &test) { EXPECT_EQ(test.node->size(), test.expected); }
-        ),
+        std::function<void(const SizeTestCase &)>([](const auto &test) {
+            EXPECT_EQ(test.node->size(), test.expected);
+        }),
         cases
     );
 }

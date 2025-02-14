@@ -11,7 +11,7 @@ class Component {
   public:
     int x;
 
-    explicit Component(int x) : x(x) {};
+    explicit Component(int x) : x(x){};
 
     Component(const Component &)            = delete;
     Component &operator=(const Component &) = delete;

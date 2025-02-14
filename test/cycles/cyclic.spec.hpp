@@ -7,7 +7,7 @@
 class CyclicTree : public TestTree {
   protected:
     Vertex<int> a, b, c, d, e, f;
-    void   SetUp() override;
+    void SetUp() override;
 };
 
 #endif

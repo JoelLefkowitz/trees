@@ -31,6 +31,8 @@ class TreesConan(ConanFile):
 
     no_copy_source = True
 
+    requires = ("funky/0.1.0",)
+
     def layout(self):
         basic_layout(self, src_folder="src")
 

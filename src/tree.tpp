@@ -37,7 +37,8 @@ void trees::Tree<T>::restore(const Vertices<T> &vertices) {
 template <typename T>
 trees::Tree<T>::Tree(T content, const Vertices<T> &children)
     : content(content)
-    , children(functional::unique(children)) {}
+    , children(functional::unique(children)) {
+}
 
 template <typename T>
 trees::Vertex<T> trees::Tree<T>::add_child(Vertex<T> vertex) {
@@ -91,7 +92,7 @@ trees::Vertices<T> trees::Tree<T>::bfs() {
 
 template <typename T>
 bool trees::Tree<T>::search(const Search<T> &condition) {
-    Vertices<T>           visited;
+    Vertices<T> visited;
     std::deque<Vertex<T>> next({this->shared_from_this()});
 
     std::map<Vertex<T>, Vertices<T>> paths;
@@ -136,7 +137,9 @@ trees::Degrees<T> trees::Tree<T>::indegrees() {
         }
     };
 
-    std::function<void(Vertex<T>)> step = [&count](auto vertex) { functional::foreach (count, vertex->children); };
+    std::function<void(Vertex<T>)> step = [&count](auto vertex) {
+        functional::foreach (count, vertex->children);
+    };
 
     if (removed) {
         return {};
@@ -150,7 +153,9 @@ template <typename T>
 trees::Degrees<T> trees::Tree<T>::outdegrees() {
     Degrees<T> map;
 
-    std::function<bool(const Vertex<T> &)> included = [](const Vertex<T> &vertex) { return !vertex->removed; };
+    std::function<bool(const Vertex<T> &)> included = [](const Vertex<T> &vertex) {
+        return !vertex->removed;
+    };
 
     std::function<void(Vertex<T>)> step = [&map, &included](auto vertex) {
         map[vertex->shared_from_this()] = functional::filter(included, vertex->children).size();
@@ -162,7 +167,9 @@ trees::Degrees<T> trees::Tree<T>::outdegrees() {
 
 template <typename T>
 bool trees::Tree<T>::contains(const Vertex<T> &target) {
-    return search([target](auto vertex, const auto &) { return vertex == target; });
+    return search([target](auto vertex, const auto &) {
+        return vertex == target;
+    });
 }
 
 template <typename T>
@@ -182,7 +189,9 @@ bool trees::Tree<T>::leaf() const {
 
 template <typename T>
 bool trees::Tree<T>::self_loops() {
-    return search([](auto vertex, const auto &) { return functional::contains(vertex->children, vertex); });
+    return search([](auto vertex, const auto &) {
+        return functional::contains(vertex->children, vertex);
+    });
 }
 
 template <typename T>
