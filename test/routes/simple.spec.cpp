@@ -1,6 +1,5 @@
 #include "simple.spec.hpp"
 #include "../setup/suites.spec.hpp"
-#include <functional/generics/functor/foreach.tpp>
 #include <functional>
 #include <gtest/gtest.h>
 #include <memory>

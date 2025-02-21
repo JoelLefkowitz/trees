@@ -6,7 +6,7 @@ from conan.tools.layout import basic_layout
 
 
 class TreesConan(ConanFile):
-    requires = ("funky/0.1.0",)
+    requires = ("funky/0.2.1",)
 
     def layout(self):
         basic_layout(self, src_folder="src")

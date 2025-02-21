@@ -1,23 +1,11 @@
 #include "../src/tree.tpp"
-#include <functional/generics/functor/map.tpp>
 #include <functional>
+#include <funky/generics/iterables.tpp>
 #include <gtest/gtest.h>
 #include <memory>
 #include <vector>
 
 using namespace trees;
-
-class Component {
-  public:
-    int x;
-
-    explicit Component(int x) : x(x){};
-
-    Component(const Component &)            = delete;
-    Component &operator=(const Component &) = delete;
-
-    ~Component() = default;
-};
 
 //      a(1)
 //       ↓
@@ -27,17 +15,16 @@ class Component {
 //  ↓        ↑        ↙   ↓   ↘
 // f(6)  →  g(7)  h(8)  i(✖)  j(10) ↺
 TEST(ExampleTree, Examples) {
-    // TODO: Add move semantics
-    auto a = std::make_shared<Tree<Component>>(Component(1));
-    auto b = std::make_shared<Tree<Component>>(Component(2));
-    auto c = std::make_shared<Tree<Component>>(Component(3));
-    auto d = std::make_shared<Tree<Component>>(Component(4));
-    auto e = std::make_shared<Tree<Component>>(Component(5));
-    auto f = std::make_shared<Tree<Component>>(Component(6));
-    auto g = std::make_shared<Tree<Component>>(Component(7));
-    auto h = std::make_shared<Tree<Component>>(Component(8));
-    auto i = std::make_shared<Tree<Component>>(Component(9));
-    auto j = std::make_shared<Tree<Component>>(Component(10));
+    auto a = std::make_shared<Tree<int>>(1);
+    auto b = std::make_shared<Tree<int>>(2);
+    auto c = std::make_shared<Tree<int>>(3);
+    auto d = std::make_shared<Tree<int>>(4);
+    auto e = std::make_shared<Tree<int>>(5);
+    auto f = std::make_shared<Tree<int>>(6);
+    auto g = std::make_shared<Tree<int>>(7);
+    auto h = std::make_shared<Tree<int>>(8);
+    auto i = std::make_shared<Tree<int>>(9);
+    auto j = std::make_shared<Tree<int>>(10);
 
     a->add_child(b);
     b->add_child(c);
@@ -55,14 +42,8 @@ TEST(ExampleTree, Examples) {
 
     e->remove({i});
 
-    EXPECT_EQ(a->bfs(), std::vector<std::shared_ptr<Tree<Component>>>({a, b, c, d, f, e, g, h, j}));
-    EXPECT_EQ(a->dfs(), std::vector<std::shared_ptr<Tree<Component>>>({a, b, c, f, g, d, e, h, j}));
-
-    // TODO: Switch to generics for mapping the dfs and running a->search(...)
-    // std::function<int(std::shared_ptr<Component>)> mapper = [](auto component) { return component->x; };
-    // std::vector<std::shared_ptr<Component>> vec = (a->dfs());
-    // std::vector<int> mapped = functional::map(mapper, vec);
-    // EXPECT_EQ(functional::map(mapper, a->dfs()), mapped);
+    EXPECT_EQ(a->bfs(), std::vector<std::shared_ptr<Tree<int>>>({a, b, c, d, f, e, g, h, j}));
+    EXPECT_EQ(a->dfs(), std::vector<std::shared_ptr<Tree<int>>>({a, b, c, f, g, d, e, h, j}));
 
     EXPECT_TRUE(a->contains(g));
 

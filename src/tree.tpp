@@ -4,12 +4,10 @@
 #include "tree.hpp"
 #include <cstddef>
 #include <deque>
-#include <functional/generics/functor/filter.tpp>
-#include <functional/generics/functor/foreach.tpp>
-#include <functional/generics/functor/map.tpp>
-#include <functional/implementations/booleans/booleans.tpp>
-#include <functional/implementations/vectors/elements.tpp>
-#include <functional/implementations/vectors/immutable.tpp>
+#include <funky/concrete/booleans.tpp>
+#include <funky/generics/iterables.tpp>
+#include <funky/generics/pairs.tpp>
+#include <funky/generics/sets.tpp>
 #include <vector>
 
 template <typename T>
@@ -20,7 +18,7 @@ void trees::Tree<T>::remove(const Vertices<T> &vertices) {
         }
     };
 
-    functional::foreach (remove_child, vertices);
+    funky::foreach (remove_child, vertices);
 }
 
 template <typename T>
@@ -31,13 +29,13 @@ void trees::Tree<T>::restore(const Vertices<T> &vertices) {
         }
     };
 
-    functional::foreach (include_child, vertices);
+    funky::foreach (include_child, vertices);
 }
 
 template <typename T>
 trees::Tree<T>::Tree(T content, const Vertices<T> &children)
     : content(content)
-    , children(functional::unique(children)) {
+    , children(funky::unique(children)) {
 }
 
 template <typename T>
@@ -56,10 +54,10 @@ trees::Vertices<T> trees::Tree<T>::dfs() {
         auto vertex = next.front();
         next.pop_front();
 
-        if (!vertex->removed && !functional::contains(visited, vertex)) {
+        if (!vertex->removed && !funky::contains(visited, vertex)) {
             visited.push_back(vertex);
 
-            for (auto i : functional::reverse(vertex->children)) {
+            for (auto i : funky::reverse(vertex->children)) {
                 next.push_front(i);
             }
         }
@@ -78,7 +76,7 @@ trees::Vertices<T> trees::Tree<T>::bfs() {
         auto vertex = next.front();
         next.pop_front();
 
-        if (!vertex->removed && !functional::contains(visited, vertex)) {
+        if (!vertex->removed && !funky::contains(visited, vertex)) {
             visited.push_back(vertex);
 
             for (auto i : vertex->children) {
@@ -104,14 +102,14 @@ bool trees::Tree<T>::search(const Search<T> &condition) {
         next.pop_front();
         paths.erase(vertex);
 
-        if (!vertex->removed && !functional::contains(visited, vertex)) {
+        if (!vertex->removed && !funky::contains(visited, vertex)) {
             if (condition(vertex, path)) {
                 return true;
             }
 
             visited.push_back(vertex);
 
-            for (auto i : functional::reverse(vertex->children)) {
+            for (auto i : funky::reverse(vertex->children)) {
                 next.push_front(i);
                 paths[i] = visited;
             }
@@ -138,14 +136,14 @@ trees::Degrees<T> trees::Tree<T>::indegrees() {
     };
 
     std::function<void(Vertex<T>)> step = [&count](auto vertex) {
-        functional::foreach (count, vertex->children);
+        funky::foreach (count, vertex->children);
     };
 
     if (removed) {
         return {};
     }
 
-    functional::foreach (step, dfs());
+    funky::foreach (step, dfs());
     return map;
 }
 
@@ -158,10 +156,10 @@ trees::Degrees<T> trees::Tree<T>::outdegrees() {
     };
 
     std::function<void(Vertex<T>)> step = [&map, &included](auto vertex) {
-        map[vertex->shared_from_this()] = functional::filter(included, vertex->children).size();
+        map[vertex->shared_from_this()] = funky::filter(included, vertex->children).size();
     };
 
-    functional::foreach (step, dfs());
+    funky::foreach (step, dfs());
     return map;
 }
 
@@ -190,14 +188,14 @@ bool trees::Tree<T>::leaf() const {
 template <typename T>
 bool trees::Tree<T>::self_loops() {
     return search([](auto vertex, const auto &) {
-        return functional::contains(vertex->children, vertex);
+        return funky::contains(vertex->children, vertex);
     });
 }
 
 template <typename T>
 bool trees::Tree<T>::parallel_links() {
     return search([](auto vertex, const auto &path) {
-        return !path.empty() && functional::contains(vertex->children, path.back());
+        return !path.empty() && funky::contains(vertex->children, path.back());
     });
 }
 
@@ -209,17 +207,18 @@ bool trees::Tree<T>::simple() {
 template <typename T>
 bool trees::Tree<T>::cyclic() {
     return !removed && search([](auto vertex, const auto &path) {
-        return functional::contains(vertex->children, vertex) || functional::overlaps(vertex->children, path);
+        return funky::contains(vertex->children, vertex) || funky::intersects(vertex->children, path);
     });
 }
 
 template <typename T>
 bool trees::Tree<T>::multitree() {
-    std::function<bool(const Vertex<T> &, const size_t &)> multiple = [](const auto &, const auto &size) {
-        return size > 1;
-    };
-
-    return functional::any(functional::map(multiple, indegrees()));
+    return funky::any(funky::map<std::vector<bool>>(
+        [](const auto &, const auto &size) {
+            return size > 1;
+        },
+        indegrees()
+    ));
 }
 
 #endif
