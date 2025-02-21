@@ -33,9 +33,8 @@ void trees::Tree<T>::restore(const Vertices<T> &vertices) {
 }
 
 template <typename T>
-trees::Tree<T>::Tree(T content, const Vertices<T> &children)
-    : content(content)
-    , children(funky::unique(children)) {
+trees::Tree<T>::Tree(T content, const Vertices<T> &children) : content(content)
+                                                             , children(funky::unique(children)) {
 }
 
 template <typename T>
