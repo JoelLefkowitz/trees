@@ -1,7 +1,7 @@
 [project]
 name = "trees"
 description = "Extensible tree data structure."
-version = "0.0.0"
+version = "0.1.0"
 
 keywords = ["tree", "graph", "degrees", "node"]
 
